@@ -32,6 +32,8 @@ class Game extends React.Component {
 
   state = {
     cells: [],
+    interval: 100,
+    isRunning: false,
   };
 
   //create an empty board
@@ -87,8 +89,24 @@ class Game extends React.Component {
     this.setState({ cells: this.makeCells() });
   };
 
+  runGame = () => {
+    this.setState({ isRunning: true });
+    // this.interval = setInterval(() => {
+    //   this.setState({ cells: this.makeCells() });
+    // }, this.state.interval);
+  };
+
+  stopGame = () => {
+    this.setState({ isRunning: false });
+    // clearInterval(this.interval);
+  };
+
+  handleIntervalChange = (event) => {
+    this.setState({ interval: event.target.value });
+  };
+
   render() {
-    const { cells } = this.state;
+    const { cells, interval, isRunning } = this.state;
     return (
       <div>
         {" "}
@@ -107,7 +125,30 @@ class Game extends React.Component {
           {cells.map((cell) => (
             <Cell x={cell.x + 1} y={cell.y} key={`${cell.x},${cell.y}`} />
           ))}
-        </div>{" "}
+        </div>
+        <div className="controls">
+          Update every
+          <input
+            value={this.state.interval}
+            onChange={this.handleIntervalChange}
+          />
+          msec
+          {isRunning ? (
+            <button className="button" onClick={this.stopGame}>
+              Stop
+            </button>
+          ) : (
+            <button className="button" onClick={this.runGame}>
+              Run
+            </button>
+          )}
+          <button className="button" onClick={this.handleRandom}>
+            Random
+          </button>
+          <button className="button" onClick={this.handleClear}>
+            Clear
+          </button>
+        </div>
       </div>
     );
   }
